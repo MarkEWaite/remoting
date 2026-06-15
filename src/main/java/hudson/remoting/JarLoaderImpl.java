@@ -39,27 +39,27 @@ class JarLoaderImpl implements JarLoader, SerializableOnlyOverRemoting {
             justification = "This is only used for managing the jar cache as files, not URLs.")
     public void writeJarTo(long sum1, long sum2, OutputStream sink) throws IOException, InterruptedException {
         Checksum k = new Checksum(sum1, sum2);
-        URI url = KNOWN_JARS.get(k);
-        if (url == null) {
+        URI uri = KNOWN_JARS.get(k);
+        if (uri == null) {
             throw new IOException("Unadvertised jar file " + k);
         }
 
         Channel channel = Channel.current();
         if (channel != null) {
-            if (url.getScheme().equals("file")) {
+            if (uri.getScheme().equals("file")) {
                 try {
-                    LOGGER.log(Level.FINE, () -> "sending " + url + " to " + channel.getName());
-                    channel.notifyJar(new File(url));
+                    LOGGER.log(Level.FINE, () -> "sending " + uri + " to " + channel.getName());
+                    channel.notifyJar(new File(uri));
                 } catch (IllegalArgumentException x) {
-                    LOGGER.log(Level.WARNING, x, () -> "cannot properly report " + url);
+                    LOGGER.log(Level.WARNING, x, () -> "cannot properly report " + uri);
                 }
             } else {
-                LOGGER.log(Level.FINE, "serving non-file URL {0}", url);
+                LOGGER.log(Level.FINE, "serving non-file URL {0}", uri);
             }
         } else {
             LOGGER.log(Level.WARNING, "no active channel");
         }
-        Util.copy(url.toURL().openStream(), sink);
+        Util.copy(uri.toURL().openStream(), sink);
         presentOnRemote.add(k);
     }
 
