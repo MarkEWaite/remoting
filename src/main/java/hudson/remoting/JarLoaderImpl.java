@@ -46,7 +46,7 @@ class JarLoaderImpl implements JarLoader, SerializableOnlyOverRemoting {
 
         Channel channel = Channel.current();
         if (channel != null) {
-            if (uri.getScheme().equals("file")) {
+            if ("file".equalsIgnoreCase(uri.getScheme())) {
                 try {
                     LOGGER.log(Level.FINE, () -> "sending " + uri + " to " + channel.getName());
                     channel.notifyJar(new File(uri));
@@ -54,7 +54,7 @@ class JarLoaderImpl implements JarLoader, SerializableOnlyOverRemoting {
                     LOGGER.log(Level.WARNING, x, () -> "cannot properly report " + uri);
                 }
             } else {
-                LOGGER.log(Level.FINE, "serving non-file URL {0}", uri);
+                LOGGER.log(Level.FINE, "serving non-file URI {0}", uri);
             }
         } else {
             LOGGER.log(Level.WARNING, "no active channel");
@@ -126,7 +126,7 @@ class JarLoaderImpl implements JarLoader, SerializableOnlyOverRemoting {
             if (cause instanceof Error err) {
                 throw err;
             }
-            throw new IOException("unexpected condition calculating checksum", cause);
+            throw new IOException("unexpected condition calculating checksum of " + jar, cause);
         }
     }
 
