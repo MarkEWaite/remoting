@@ -35,8 +35,9 @@ class JarLoaderImpl implements JarLoader, SerializableOnlyOverRemoting {
 
     @Override
     @SuppressFBWarnings(
-            value = {"URLCONNECTION_SSRF_FD", "PATH_TRAVERSAL_IN"},
-            justification = "This is only used for managing the jar cache as files, not URLs.")
+            value = {"URLCONNECTION_SSRF_FD", "PATH_TRAVERSAL_IN", "IMPROPER_UNICODE"},
+            justification =
+                    "This is only used for managing the jar cache as files, not URLs. file schema matching is correct")
     public void writeJarTo(long sum1, long sum2, OutputStream sink) throws IOException, InterruptedException {
         Checksum k = new Checksum(sum1, sum2);
         URI uri = KNOWN_JARS.get(k);
