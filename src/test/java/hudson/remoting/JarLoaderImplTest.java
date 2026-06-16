@@ -1,6 +1,6 @@
 package hudson.remoting;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.net.URI;
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.io.TempDir;
 class JarLoaderImplTest {
 
     @Test
-    void testSubsequentCallersUseTheCachedCheckSum(@TempDir Path tempDir) throws IOException {
+    void testSubsequentCallersUseTheCachedChecksum(@TempDir Path tempDir) throws IOException {
         // create temp file to checksum
         Path tmpFile = tempDir.resolve("fake.jar");
         Files.writeString(tmpFile, "nothing of interest", StandardOpenOption.CREATE_NEW);
